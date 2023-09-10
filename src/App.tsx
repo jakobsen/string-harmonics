@@ -51,9 +51,21 @@ function App() {
         </Row>
       </TextWrapper>
       <String />
-      {partials.map((partial) => (
-        <PartialsLine partial={partial} key={partial} />
-      ))}
+      {partials.map((partial, idx) => {
+        const { noteName, centsOffset } = closestNote(
+          baseFrequency * (idx + 2)
+        );
+        return (
+          <PartialsLine
+            partial={partial}
+            key={partial}
+            noteName={noteName}
+            centsOffset={`${centsOffset >= 0 ? "+" : ""}${centsOffset.toFixed(
+              1
+            )}`}
+          />
+        );
+      })}
     </Wrapper>
   );
 }
@@ -108,7 +120,7 @@ const String = styled.div`
 `;
 
 const Input = styled.input`
-  width: 5ch;
+  width: 8ch;
   font: inherit;
 `;
 
