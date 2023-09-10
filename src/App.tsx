@@ -2,13 +2,17 @@ import "./App.css";
 import styled from "styled-components";
 import PartialsLine from "./PartialsLine";
 import { useState } from "react";
+import { closestNote } from "./utils";
 
 function App() {
   const [numberOfPartials, setNumberOfPartials] = useState(4);
+  const [baseFrequency, setBaseFreuqyency] = useState(440);
   const partials = Array.from({ length: numberOfPartials }).map(
     // We start from the second partial. The first partial is simply the open string.
     (_, idx) => idx + 2
   );
+
+  const { noteName, centsOffset } = closestNote(baseFrequency);
 
   return (
     <Wrapper>
@@ -27,6 +31,23 @@ function App() {
           <button onClick={() => setNumberOfPartials(numberOfPartials + 1)}>
             +
           </button>
+        </Row>
+        <Row>
+          <div>
+            <label htmlFor="base-frequency">Base Frequency</label>
+            <br />
+            <Input
+              type="number"
+              value={baseFrequency}
+              // TODO: Handle non-numerical and decimal values
+              onChange={(e) => setBaseFreuqyency(+e.target.value)}
+              id="base-frequency"
+            />
+            <p>
+              {noteName} {centsOffset >= 0 && "+"}
+              {centsOffset.toFixed(1)}
+            </p>
+          </div>
         </Row>
       </TextWrapper>
       <String />
@@ -84,6 +105,11 @@ const String = styled.div`
   &::after {
     right: 0;
   }
+`;
+
+const Input = styled.input`
+  width: 5ch;
+  font: inherit;
 `;
 
 export default App;
