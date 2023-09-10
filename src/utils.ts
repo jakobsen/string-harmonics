@@ -10,10 +10,15 @@ export function centsBetweenFrequencies(
   return 1200 * Math.log2(frequencyA / frequencyB);
 }
 
-export function closestNote(frequency: number, baseFrequency = 440): string {
+export function closestNote(
+  frequency: number,
+  baseFrequency = 440
+): { noteName: string; centsOffset: number } {
   const cents = centsBetweenFrequencies(frequency, baseFrequency);
   const steps = Math.round(cents / 100);
-  return noteAtStepsFromA(steps);
+  const centsOffset = cents - 100 * steps;
+  const noteName = noteAtStepsFromA(steps);
+  return { noteName, centsOffset };
 }
 
 export function noteAtStepsFromA(steps: number): string {
